@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071426"/><stop offset="1" stop-color="#102e52"/></linearGradient>
+ <radialGradient id="glow"><stop stop-color="#147bd1" stop-opacity=".42"/><stop offset="1" stop-color="#147bd1" stop-opacity="0"/></radialGradient>
+ <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#5ab6ff" stroke-opacity=".09"/></pattern>
+</defs>
+<rect width="1920" height="1080" fill="url(#bg)"/><rect width="1920" height="1080" fill="url(#grid)"/>
+<circle cx="1460" cy="390" r="570" fill="url(#glow)"/>
+<g fill="none" stroke="#36a9ff" stroke-opacity=".22"><path d="M980 0L1920 940M1180 0L1920 740M780 0L1920 1140M1920 180L1020 1080" stroke-width="2"/><circle cx="1450" cy="540" r="330"/><circle cx="1450" cy="540" r="270"/><circle cx="1450" cy="540" r="210"/></g>
+<g transform="translate(220 365)"><path d="M0 0h130l65 65-65 65H0l65-65z" fill="#168ce0"/><path d="M84 34h45l31 31-31 31H84l31-31z" fill="#d8f2ff"/><text x="235" y="82" fill="#f4f9ff" font-family="DejaVu Sans,sans-serif" font-size="104" font-weight="700" letter-spacing="8">CYBERNEX</text><text x="242" y="145" fill="#7fcaff" font-family="DejaVu Sans,sans-serif" font-size="27" letter-spacing="8">YOUR DESKTOP. YOUR CONTROL.</text></g>
+<text x="225" y="850" fill="#9bbbd7" font-family="DejaVu Sans,sans-serif" font-size="24" letter-spacing="4">DEBIAN 13 • XFCE • LIGHTWEIGHT BY DESIGN</text>
+</svg>

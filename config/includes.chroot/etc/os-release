@@ -1,0 +1,10 @@
+PRETTY_NAME="CYBERNEX 0.1 (Debian 13)"
+NAME="CYBERNEX"
+VERSION_ID="0.1"
+VERSION="0.1 (Debian 13 Trixie)"
+VERSION_CODENAME=trixie
+ID=cybernex
+ID_LIKE=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"

@@ -1,0 +1,54 @@
+name: Build CYBERNEX ISO
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'auto/**'
+      - 'config/**'
+      - 'scripts/**'
+      - '.github/workflows/build-iso.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    container:
+      image: debian:trixie
+    timeout-minutes: 360
+
+    steps:
+      - name: Install Git and base tools
+        run: |
+          apt-get update
+          apt-get install -y git ca-certificates bash
+
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install Debian Live build tools
+        run: |
+          apt-get update
+          apt-get install -y live-build debootstrap xorriso squashfs-tools
+
+      - name: Validate source
+        run: |
+          bash -n scripts/build-iso.sh
+          sh -n auto/config
+          test -s config/package-lists/cybernex.list.chroot
+
+      - name: Build ISO
+        run: ./scripts/build-iso.sh
+
+      - name: Upload ISO and checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: cybernex-iso
+          path: |
+            build/*.iso
+            build/*.sha256
+          if-no-files-found: error
+          retention-days: 7
