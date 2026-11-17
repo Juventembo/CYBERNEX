@@ -10,7 +10,7 @@ lightdm
 network-manager
 network-manager-gnome
 sudo
-policykit-1
+polkitd pkexec
 firefox-esr
 mousepad
 ristretto
