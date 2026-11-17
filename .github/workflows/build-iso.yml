@@ -1,3 +1,4 @@
+
 name: Build CYBERNEX ISO
 
 on:
@@ -23,15 +24,16 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Install Debian Live build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y live-build debootstrap xorriso squashfs-tools
+
       - name: Fix Live Build Contents index path
         run: |
           sudo sed -i \
             's|/dists/${LB_PARENT_DISTRIBUTION}/Contents-|/dists/${LB_PARENT_DISTRIBUTION}/main/Contents-|g; s|/dists/${LB_DISTRIBUTION}/Contents-|/dists/${LB_DISTRIBUTION}/main/Contents-|g' \
             /usr/lib/live/build/lb_chroot_linux-image
           grep -n 'Contents-' /usr/lib/live/build/lb_chroot_linux-image
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y live-build debootstrap xorriso squashfs-tools
 
       - name: Validate source
         run: |
@@ -51,3 +53,4 @@ jobs:
             build/*.sha256
           if-no-files-found: error
           retention-days: 7
+
