@@ -16,23 +16,16 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    container:
-      image: debian:trixie
     timeout-minutes: 360
 
     steps:
-      - name: Install Git and base tools
-        run: |
-          apt-get update
-          apt-get install -y git ca-certificates bash
-
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Debian Live build tools
         run: |
-          apt-get update
-          apt-get install -y live-build debootstrap xorriso squashfs-tools
+          sudo apt-get update
+          sudo apt-get install -y live-build debootstrap xorriso squashfs-tools
 
       - name: Validate source
         run: |
@@ -41,7 +34,7 @@ jobs:
           test -s config/package-lists/cybernex.list.chroot
 
       - name: Build ISO
-        run: ./scripts/build-iso.sh
+        run: sudo ./scripts/build-iso.sh
 
       - name: Upload ISO and checksum
         uses: actions/upload-artifact@v4
