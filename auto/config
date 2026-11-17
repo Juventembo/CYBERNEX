@@ -6,6 +6,7 @@ lb config noauto \
   --distribution trixie \
   --architectures amd64 \
   --binary-images iso-hybrid \
+  --security false \
   --archive-areas "main contrib non-free non-free-firmware" \
   --mirror-bootstrap https://deb.debian.org/debian/ \
   --mirror-chroot https://deb.debian.org/debian/ \
