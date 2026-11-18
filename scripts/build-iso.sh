@@ -22,7 +22,7 @@ done
 
 # Uploading via the GitHub web UI drops executable bits; live-build silently
 # ignores a non-executable auto/config and would build the wrong distribution.
-chmod +x auto/* scripts/*.sh
+chmod +x auto/* scripts/*.sh config/hooks/live/*.hook.* 2>/dev/null || true
 
 mkdir -p build
 echo "live-build version: $(lb --version 2>&1 || true)"

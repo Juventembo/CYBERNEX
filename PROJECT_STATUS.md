@@ -25,6 +25,10 @@ Root cause of the `lb_binary_syslinux` failure (`/root/isolinux/isolinux.bin`, `
 
 Fix applied (untested on a real runner): the workflow now builds in a privileged `debian:trixie` container with Debian's live-build. Other fixes: `auto/config` now sets bootloaders (`syslinux,grub-efi`), no debian-installer, ISO name/volume; `build-iso.sh` restores exec bits (lost on GitHub web upload), verifies Trixie was applied, logs to `build/build.log`; the `/etc/issue` and `check-build-host.sh` escape bugs; the hard-coded 1920x1080 panel position; `.gitignore` entries; and `lightdm-gtk-greeter`/`xserver-xorg`/`dbus-x11` added to the package list.
 
+## Installer
+
+A Calamares hard-drive installer (calamares + calamares-settings-debian) is included in the live image, with an Install launcher on the desktop via `config/hooks/live/0100-installer-shortcut.hook.chroot`. **Untested**: verify a full install in a VM (BIOS and UEFI) before using on real hardware.
+
 ## Important next steps
 
 1. Push these changes and re-run **Build CYBERNEX ISO**; if it fails, download the `cybernex-build-log` artifact.

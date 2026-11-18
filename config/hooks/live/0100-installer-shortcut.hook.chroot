@@ -1,0 +1,12 @@
+#!/bin/sh
+# Put an "Install" launcher on the desktop of the live user (copied from /etc/skel).
+set -eu
+mkdir -p /etc/skel/Desktop
+for f in /usr/share/applications/install-debian.desktop /usr/share/applications/calamares.desktop; do
+  if [ -f "$f" ]; then
+    cp "$f" /etc/skel/Desktop/
+    chmod +x "/etc/skel/Desktop/$(basename "$f")"
+    break
+  fi
+done
+exit 0

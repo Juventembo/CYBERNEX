@@ -73,3 +73,7 @@ Use scanning and assessment tools only on systems and networks you own or have e
 3. Boot-test in a VM and on the Core 2 target.
 4. Tune memory use, boot time, drivers and desktop usability from measured results.
 5. Add an installer workflow only after the live system is verified.
+
+## Installing to disk
+
+Boot the live ISO and double-click **Install** on the desktop (Calamares). Test in a VM first; the installer is new and untested.

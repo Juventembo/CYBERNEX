@@ -80,3 +80,20 @@ iproute2
 iputils-ping
 mtr-tiny
 arp-scan
+
+# Hard-drive installer (Calamares, Debian branding) and the tools it needs
+calamares
+calamares-settings-debian
+grub-pc-bin
+grub-efi-amd64-bin
+grub-efi-amd64-signed
+shim-signed
+os-prober
+cryptsetup
+rsync
+kpartx
+dosfstools
+e2fsprogs
+btrfs-progs
+xfsprogs
+gparted
