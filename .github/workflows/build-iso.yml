@@ -39,16 +39,17 @@ jobs:
           ISO_FILE="$(find /usr -type f -name isolinux.bin -print -quit)"
           MENU_FILE="$(find /usr -type f -name vesamenu.c32 -print -quit)"
 
-          test -n "$ISO_FILE" || { echo "isolinux.bin missing"; exit 1; }
-          test -n "$MENU_FILE" || { echo "vesamenu.c32 missing"; exit 1; }
+          test -n "$ISO_FILE" || { echo "isolinux.bin not found"; exit 1; }
+          test -n "$MENU_FILE" || { echo "vesamenu.c32 not found"; exit 1; }
 
-          DEST="config/includes.chroot/root/isolinux"
-          mkdir -p "$DEST"
-          install -m 0644 "$ISO_FILE" "$DEST/isolinux.bin"
-          install -m 0644 "$MENU_FILE" "$DEST/vesamenu.c32"
+          sudo mkdir -p /root/isolinux
+          sudo install -m 0644 "$ISO_FILE" /root/isolinux/isolinux.bin
+          sudo install -m 0644 "$MENU_FILE" /root/isolinux/vesamenu.c32
 
-          echo "BIOS bootloader files prepared for the Debian chroot:"
-          ls -lh "$DEST"
+          echo "Verifying files in the exact directory required by Live Build:"
+          sudo test -s /root/isolinux/isolinux.bin
+          sudo test -s /root/isolinux/vesamenu.c32
+          sudo ls -lh /root/isolinux/
 
       - name: Fix Live Build Contents index path
         run: |
