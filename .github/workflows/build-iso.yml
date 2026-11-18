@@ -57,7 +57,7 @@ jobs:
           sudo install -m 0644 "$ISO_FILE" /root/isolinux/isolinux.bin
           sudo install -m 0644 "$MENU_FILE" /root/isolinux/vesamenu.c32
 
-          ls -lh /root/isolinux/
+          sudo ls -lh /root/isolinux/
 
       - name: Fix Live Build Contents index path
         run: |
