@@ -44,6 +44,17 @@ jobs:
           sh -n auto/config
           test -s config/package-lists/cybernex.list.chroot
 
+      - name: Inspect Syslinux build scripts
+        run: |
+          echo "=== Live Build Syslinux script ==="
+          sed -n '1,240p' /usr/lib/live/build/lb_binary_syslinux
+          echo "=== Bootloader files ==="
+          ls -l /usr/share/live/build/bootloaders/isolinux/
+          ls -l /usr/lib/ISOLINUX/
+          ls -l /usr/lib/syslinux/modules/bios/
+          echo "=== Package versions ==="
+          dpkg-query -W live-build isolinux syslinux-common
+
       - name: Build ISO
         run: sudo ./scripts/build-iso.sh
 
