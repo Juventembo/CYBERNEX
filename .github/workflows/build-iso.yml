@@ -36,28 +36,19 @@ jobs:
         run: |
           set -euo pipefail
 
-          echo "Searching for ISOLINUX files..."
           ISO_FILE="$(find /usr -type f -name isolinux.bin -print -quit)"
           MENU_FILE="$(find /usr -type f -name vesamenu.c32 -print -quit)"
 
-          if [ -z "$ISO_FILE" ]; then
-            echo "ERROR: isolinux.bin was not found."
-            exit 1
-          fi
+          test -n "$ISO_FILE" || { echo "isolinux.bin missing"; exit 1; }
+          test -n "$MENU_FILE" || { echo "vesamenu.c32 missing"; exit 1; }
 
-          if [ -z "$MENU_FILE" ]; then
-            echo "ERROR: vesamenu.c32 was not found."
-            exit 1
-          fi
+          DEST="config/includes.chroot/root/isolinux"
+          mkdir -p "$DEST"
+          install -m 0644 "$ISO_FILE" "$DEST/isolinux.bin"
+          install -m 0644 "$MENU_FILE" "$DEST/vesamenu.c32"
 
-          echo "Found: $ISO_FILE"
-          echo "Found: $MENU_FILE"
-
-          sudo mkdir -p /root/isolinux
-          sudo install -m 0644 "$ISO_FILE" /root/isolinux/isolinux.bin
-          sudo install -m 0644 "$MENU_FILE" /root/isolinux/vesamenu.c32
-
-          sudo ls -lh /root/isolinux/
+          echo "BIOS bootloader files prepared for the Debian chroot:"
+          ls -lh "$DEST"
 
       - name: Fix Live Build Contents index path
         run: |
