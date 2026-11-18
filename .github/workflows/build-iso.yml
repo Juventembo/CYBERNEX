@@ -3,8 +3,7 @@ name: Build CYBERNEX ISO
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
       - 'auto/**'
       - 'config/**'
@@ -18,72 +17,47 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 360
-
+    # Build inside Debian 13 (Trixie) so we get Debian's modern live-build.
+    # The Ubuntu 24.04 runner ships live-build 3.0~a57, an ancient Ubuntu fork
+    # that cannot build Trixie images (it fails at lb_binary_syslinux).
+    # --privileged is required so debootstrap/live-build can mount /proc, /dev etc.
+    container:
+      image: debian:trixie
+      options: --privileged
+    env:
+      DEBIAN_FRONTEND: noninteractive
     steps:
+      - name: Install build tools
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            live-build debootstrap xorriso squashfs-tools ca-certificates git \
+            dosfstools mtools isolinux syslinux-common syslinux-utils \
+            grub-pc-bin grub-efi-amd64-bin grub-efi-ia32-bin
+          lb --version
       - name: Check out source
-        uses: actions/checkout@v5
-
-      - name: Install Debian Live build tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y live-build debootstrap xorriso squashfs-tools isolinux syslinux syslinux-common
-          echo "Checking BIOS bootloader files..."
-          ls -l /usr/lib/ISOLINUX/isolinux.bin
-          find /usr/lib/syslinux -name vesamenu.c32
-
-      - name: Prepare Syslinux BIOS bootloader files
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          ISO_FILE="$(find /usr -type f -name isolinux.bin -print -quit)"
-          MENU_FILE="$(find /usr -type f -name vesamenu.c32 -print -quit)"
-
-          test -n "$ISO_FILE" || { echo "isolinux.bin missing"; exit 1; }
-          test -n "$MENU_FILE" || { echo "vesamenu.c32 missing"; exit 1; }
-
-          DEST="config/includes.chroot/root/isolinux"
-          mkdir -p "$DEST"
-          install -m 0644 "$ISO_FILE" "$DEST/isolinux.bin"
-          install -m 0644 "$MENU_FILE" "$DEST/vesamenu.c32"
-
-          test -s "$DEST/isolinux.bin"
-          test -s "$DEST/vesamenu.c32"
-          ls -lh "$DEST"
-
-      - name: Fix Live Build Contents index path
-        run: |
-          sudo sed -i \
-            's|/dists/${LB_PARENT_DISTRIBUTION}/Contents-|/dists/${LB_PARENT_DISTRIBUTION}/main/Contents-|g; s|/dists/${LB_DISTRIBUTION}/Contents-|/dists/${LB_DISTRIBUTION}/main/Contents-|g' \
-            /usr/lib/live/build/lb_chroot_linux-image
-          grep -n 'Contents-' /usr/lib/live/build/lb_chroot_linux-image
-
-      - name: Validate source
+        uses: actions/checkout@v4
+      - name: Validate source scripts
         run: |
           bash -n scripts/build-iso.sh
           sh -n auto/config
           test -s config/package-lists/cybernex.list.chroot
-
-      - name: Inspect Syslinux build scripts
-        run: |
-          echo "=== Live Build Syslinux script ==="
-          sed -n '1,240p' /usr/lib/live/build/lb_binary_syslinux
-          echo "=== Bootloader files ==="
-          ls -l /usr/share/live/build/bootloaders/isolinux/
-          ls -l /usr/lib/ISOLINUX/
-          ls -l /usr/lib/syslinux/modules/bios/
-          echo "=== Package versions ==="
-          dpkg-query -W live-build isolinux syslinux-common
-
       - name: Build ISO
-        run: sudo ./scripts/build-iso.sh
-
+        run: bash scripts/build-iso.sh
       - name: Upload ISO and checksum
         uses: actions/upload-artifact@v4
         with:
           name: cybernex-iso
           path: |
             build/*.iso
-            build/*.sha256
+            build/*.iso.sha256
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 14
+      - name: Upload build log (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cybernex-build-log
+          path: build/build.log
+          if-no-files-found: ignore
+          retention-days: 14

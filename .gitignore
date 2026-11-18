@@ -1,9 +1,18 @@
 build/
 *.iso
 *.iso.sha256
+*.log
+# live-build generated
+chroot/
+binary/
+cache/
+.build/
 .chroot/
 .binary/
-.cache/
+live-image-*
+cybernex-*.contents
+cybernex-*.files
+cybernex-*.packages
 config/binary
 config/bootstrap
 config/chroot

@@ -16,7 +16,7 @@ This is the initial CYBERNEX source project, created from scratch. It is a build
 
 ## Build the ISO in the cloud (recommended)
 
-The included GitHub Actions workflow uses a hosted GitHub Actions runner with a Debian 13 (Trixie) build container.
+The included GitHub Actions workflow runs on a hosted Ubuntu runner but builds inside a `debian:trixie` container, so it uses Debian's modern `live-build`.
 
 1. Create an empty repository on GitHub.
 2. Upload the contents of this folder to the repository root (the `.github` folder must be included).
@@ -31,12 +31,13 @@ The hosted runner's time, storage and package availability are subject to GitHub
 A local build needs substantial temporary disk space and RAM. On the target 4 GB PC, use the cloud workflow instead.
 
 ```bash
+# On Debian 13 (or a debian:trixie container). Ubuntu's live-build is too old.
 sudo apt update
-sudo apt install -y live-build debootstrap xorriso squashfs-tools
+sudo apt install -y live-build debootstrap xorriso squashfs-tools isolinux syslinux-common grub-pc-bin grub-efi-amd64-bin mtools dosfstools
 sudo ./scripts/build-iso.sh
 ```
 
-The resulting ISO and checksum are copied to `build/`.
+The resulting ISO, checksum and `build.log` are copied to `build/`.
 
 ## Test safely
 
@@ -55,8 +56,7 @@ CYBERNEX/
 ├── .github/workflows/build-iso.yml
 ├── auto/config
 ├── config/package-lists/cybernex.list.chroot
-├── config/includes.chroot/       # desktop defaults, branding, OS identity
-├── config/includes.chroot/usr/share/backgrounds/cybernex/  # wallpaper artwork
+├── config/includes.chroot/       # desktop defaults, branding, OS identity and APT sources
 ├── scripts/                      # build and host checks
 ├── .gitignore
 └── README.md

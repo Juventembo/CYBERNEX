@@ -7,10 +7,14 @@ thunar-volman
 gvfs
 gvfs-backends
 lightdm
+lightdm-gtk-greeter
+xserver-xorg
+dbus-x11
 network-manager
 network-manager-gnome
 sudo
-polkitd pkexec
+polkitd
+pkexec
 firefox-esr
 mousepad
 ristretto
