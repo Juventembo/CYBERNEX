@@ -31,6 +31,34 @@ jobs:
           ls -l /usr/lib/ISOLINUX/isolinux.bin
           find /usr/lib/syslinux -name vesamenu.c32
 
+      - name: Prepare Syslinux BIOS bootloader files
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          echo "Searching for ISOLINUX files..."
+          ISO_FILE="$(find /usr -type f -name isolinux.bin -print -quit)"
+          MENU_FILE="$(find /usr -type f -name vesamenu.c32 -print -quit)"
+
+          if [ -z "$ISO_FILE" ]; then
+            echo "ERROR: isolinux.bin was not found."
+            exit 1
+          fi
+
+          if [ -z "$MENU_FILE" ]; then
+            echo "ERROR: vesamenu.c32 was not found."
+            exit 1
+          fi
+
+          echo "Found: $ISO_FILE"
+          echo "Found: $MENU_FILE"
+
+          sudo mkdir -p /root/isolinux
+          sudo install -m 0644 "$ISO_FILE" /root/isolinux/isolinux.bin
+          sudo install -m 0644 "$MENU_FILE" /root/isolinux/vesamenu.c32
+
+          ls -lh /root/isolinux/
+
       - name: Fix Live Build Contents index path
         run: |
           sudo sed -i \
