@@ -5,6 +5,7 @@ lb config noauto \
   --mode debian \
   --distribution trixie \
   --architectures amd64 \
+  --initsystem systemd \
   --binary-images iso-hybrid \
   --security false \
   --archive-areas "main contrib non-free non-free-firmware" \
